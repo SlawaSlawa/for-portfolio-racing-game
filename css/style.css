@@ -58,7 +58,7 @@ body {
     position: absolute;
     width: 80px;
     left: calc(50% - 40px);
-    bottom: 20px;
+    top: 450px;
     z-index: 30;
 }
 .start-btn {
