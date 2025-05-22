@@ -19,6 +19,8 @@ let isStop = false;
 const carInfo = {
     currentX: car.offsetLeft,
     currentY: car.offsetTop,
+    width: car.width,
+    height: car.height,
     stopIdUp: null,
     stopIdDown: null,
     stopIdLeft: null,
@@ -159,28 +161,36 @@ function moveCoin() {
 }
 
 function moveToTop() {
-    const y = carInfo.currentY - step;
-    carInfo.currentY = y;
-    car.style.top = y + "px";
-    carInfo.stopIdUp = requestAnimationFrame(moveToTop);
+    if (carInfo.currentY > 0) {
+        const y = carInfo.currentY - step;
+        carInfo.currentY = y;
+        car.style.top = y + "px";
+        carInfo.stopIdUp = requestAnimationFrame(moveToTop);
+    }
 }
 function moveToDown() {
-    const y = carInfo.currentY + step;
-    carInfo.currentY = y;
-    car.style.top = y + "px";
-    carInfo.stopIdDown = requestAnimationFrame(moveToDown);
+    if (carInfo.currentY < bgHeight - carInfo.height) {
+        const y = carInfo.currentY + step;
+        carInfo.currentY = y;
+        car.style.top = y + "px";
+        carInfo.stopIdDown = requestAnimationFrame(moveToDown);
+    }
 }
 function moveToLeft() {
-    const x = carInfo.currentX - step;
-    carInfo.currentX = x;
-    car.style.left = x + "px";
-    carInfo.stopIdLeft = requestAnimationFrame(moveToLeft);
+    if (carInfo.currentX > 0) {
+        const x = carInfo.currentX - step;
+        carInfo.currentX = x;
+        car.style.left = x + "px";
+        carInfo.stopIdLeft = requestAnimationFrame(moveToLeft);
+    }
 }
 function moveToRight() {
-    const x = carInfo.currentX + step;
-    carInfo.currentX = x;
-    car.style.left = x + "px";
-    carInfo.stopIdRight = requestAnimationFrame(moveToRight);
+    if (carInfo.currentX < roadWidth - carInfo.width) {
+        const x = carInfo.currentX + step;
+        carInfo.currentX = x;
+        car.style.left = x + "px";
+        carInfo.stopIdRight = requestAnimationFrame(moveToRight);
+    }
 }
 
 startBtn.addEventListener("click", () => {
