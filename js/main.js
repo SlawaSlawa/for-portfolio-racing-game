@@ -5,6 +5,7 @@ const bg = document.querySelector(".bg");
 const startBtn = document.querySelector(".start-btn");
 const car = document.querySelector(".car");
 const coin = document.querySelector(".coin");
+const danger = document.querySelector(".danger");
 const road = document.querySelector(".road");
 
 const treesList = [];
@@ -34,7 +35,14 @@ const coinInfo = {
     height: coin.height,
     stopId: null,
     hasPosX: false,
-    // isAnimate: false
+};
+const dangerInfo = {
+    currentX: danger.offsetLeft,
+    currentY: danger.offsetTop,
+    width: danger.width,
+    height: danger.height,
+    stopId: null,
+    hasPosX: false,
 };
 
 treesListEl.forEach((element) => {
@@ -56,6 +64,7 @@ function startGame() {
         requestAnimationFrame(moveBg(tree));
     });
     requestAnimationFrame(moveCoin);
+    requestAnimationFrame(moveDanger);
 }
 
 function stopGame() {
@@ -104,6 +113,28 @@ function moveBg(elementInfo) {
     };
 }
 
+function moveDanger() {
+    if (!isStop) {
+        const y = dangerInfo.currentY + speed;
+        let x = 0;
+
+        if (!dangerInfo.hasPosX) {
+            x = Math.floor(Math.random() * (roadWidth - dangerInfo.width));
+            dangerInfo.hasPosX = true;
+            danger.style.left = x + "px";
+            dangerInfo.currentX = x;
+        }
+
+        dangerInfo.currentY = y;
+        danger.style.top = y + "px";
+
+        if (dangerInfo.currentY > bgHeight) {
+            dangerInfo.currentY = -dangerInfo.height - 400;
+            dangerInfo.hasPosX = false;
+        }
+        dangerInfo.stopId = requestAnimationFrame(moveDanger);
+    }
+}
 function moveCoin() {
     if (!isStop) {
         const y = coinInfo.currentY + speed;

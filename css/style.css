@@ -112,7 +112,7 @@ body {
 
 .danger {
     position: absolute;
-    top: 20px;
+    top: -480px;
     left: 80px;
     width: 150px;
     height: 80px;
