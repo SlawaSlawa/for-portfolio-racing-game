@@ -34,6 +34,7 @@ const coinInfo = {
     height: coin.height,
     stopId: null,
     hasPosX: false,
+    // isAnimate: false
 };
 
 treesListEl.forEach((element) => {
@@ -50,6 +51,7 @@ treesListEl.forEach((element) => {
 });
 
 function startGame() {
+    isStop = false;
     treesList.forEach((tree) => {
         requestAnimationFrame(moveBg(tree));
     });
@@ -72,7 +74,6 @@ function stopGame() {
         treesList.forEach((tree) => {
             requestAnimationFrame(moveBg(tree));
         });
-        console.log(coinInfo.stopId);
         cancelAnimationFrame(coinInfo.stopId);
 
         cancelAnimationFrame(carInfo.stopIdUp);
@@ -104,24 +105,26 @@ function moveBg(elementInfo) {
 }
 
 function moveCoin() {
-    const y = coinInfo.currentY + speed;
-    let x = 0;
+    if (!isStop) {
+        const y = coinInfo.currentY + speed;
+        let x = 0;
 
-    if (!coinInfo.hasPosX) {
-        x = Math.floor(Math.random() * (roadWidth - coinInfo.width));
-        coinInfo.hasPosX = true;
-        coin.style.left = x + "px";
-        coinInfo.currentX = x;
+        if (!coinInfo.hasPosX) {
+            x = Math.floor(Math.random() * (roadWidth - coinInfo.width));
+            coinInfo.hasPosX = true;
+            coin.style.left = x + "px";
+            coinInfo.currentX = x;
+        }
+
+        coinInfo.currentY = y;
+        coin.style.top = y + "px";
+
+        if (coinInfo.currentY > bgHeight) {
+            coinInfo.currentY = -coinInfo.height - 100;
+            coinInfo.hasPosX = false;
+        }
+        coinInfo.stopId = requestAnimationFrame(moveCoin);
     }
-
-    coinInfo.currentY = y;
-    coin.style.top = y + "px";
-
-    if (coinInfo.currentY > bgHeight) {
-        coinInfo.currentY = -coinInfo.height - 100;
-        coinInfo.hasPosX = false;
-    }
-    coinInfo.stopId = requestAnimationFrame(moveCoin);
 }
 
 function moveToTop() {
@@ -149,7 +152,13 @@ function moveToRight() {
     carInfo.stopIdRight = requestAnimationFrame(moveToRight);
 }
 
-startBtn.addEventListener("click", stopGame);
+startBtn.addEventListener("click", () => {
+    if (!isStop) {
+        stopGame();
+    } else {
+        startGame();
+    }
+});
 
 window.addEventListener("keydown", (evt) => {
     const code = evt.code;
