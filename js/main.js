@@ -7,13 +7,15 @@ const car = document.querySelector(".car");
 const coin = document.querySelector(".coin");
 const danger = document.querySelector(".danger");
 const road = document.querySelector(".road");
+const score = document.querySelector(".score");
 
 const treesList = [];
 const speed = 3;
-const step = 3;
+const step = 5;
 const bgHeight = bg.clientHeight;
 const roadWidth = road.clientWidth;
 
+let scoreCounter = 0;
 let isStop = false;
 
 const carInfo = {
@@ -37,6 +39,7 @@ const coinInfo = {
     height: coin.height,
     stopId: null,
     hasPosX: false,
+    isCollision: false,
 };
 const dangerInfo = {
     currentX: danger.offsetLeft,
@@ -152,16 +155,26 @@ function moveCoin() {
         coinInfo.currentY = y;
         coin.style.top = y + "px";
 
-        if (coinInfo.currentY > bgHeight) {
+        if (coinInfo.currentY > bgHeight || coin.style.display === "none") {
             coinInfo.currentY = -coinInfo.height - 100;
             coinInfo.hasPosX = false;
+            coin.style.display = "block";
         }
+        if (hasCollision(coinInfo) && !coinInfo.isCollision) {
+            scoreCounter++;
+            coinInfo.isCollision = true;
+            score.textContent = scoreCounter;
+            coin.style.display = "none";
+        }
+
+        if (!hasCollision(coinInfo)) coinInfo.isCollision = false;
+
         coinInfo.stopId = requestAnimationFrame(moveCoin);
     }
 }
 
 function moveToTop() {
-    if (carInfo.currentY > 0) {
+    if (carInfo.currentY > 0 && !isStop) {
         const y = carInfo.currentY - step;
         carInfo.currentY = y;
         car.style.top = y + "px";
@@ -169,7 +182,7 @@ function moveToTop() {
     }
 }
 function moveToDown() {
-    if (carInfo.currentY < bgHeight - carInfo.height) {
+    if (carInfo.currentY < bgHeight - carInfo.height && !isStop) {
         const y = carInfo.currentY + step;
         carInfo.currentY = y;
         car.style.top = y + "px";
@@ -177,7 +190,7 @@ function moveToDown() {
     }
 }
 function moveToLeft() {
-    if (carInfo.currentX > 0) {
+    if (carInfo.currentX > 0 && !isStop) {
         const x = carInfo.currentX - step;
         carInfo.currentX = x;
         car.style.left = x + "px";
@@ -185,12 +198,35 @@ function moveToLeft() {
     }
 }
 function moveToRight() {
-    if (carInfo.currentX < roadWidth - carInfo.width) {
+    if (carInfo.currentX < roadWidth - carInfo.width && !isStop) {
         const x = carInfo.currentX + step;
         carInfo.currentX = x;
         car.style.left = x + "px";
         carInfo.stopIdRight = requestAnimationFrame(moveToRight);
     }
+}
+
+function hasCollision(elementInfo) {
+    const carTop = carInfo.currentY;
+    const carBottom = carInfo.currentY + carInfo.height;
+    const carLeft = carInfo.currentX;
+    const carRight = carInfo.currentX + carInfo.width;
+
+    if (
+        carTop >= elementInfo.currentY + elementInfo.height ||
+        carBottom <= elementInfo.currentY
+    ) {
+        return false;
+    }
+
+    if (
+        carLeft >= elementInfo.currentX + elementInfo.width ||
+        carRight <= elementInfo.currentX
+    ) {
+        return false;
+    }
+
+    return true;
 }
 
 startBtn.addEventListener("click", () => {
