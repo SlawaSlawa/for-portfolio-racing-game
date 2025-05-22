@@ -4,11 +4,14 @@ const treesListEl = document.querySelectorAll(".tree");
 const bg = document.querySelector(".bg");
 const startBtn = document.querySelector(".start-btn");
 const car = document.querySelector(".car");
+const coin = document.querySelector(".coin");
+const road = document.querySelector(".road");
 
 const treesList = [];
 const speed = 3;
 const step = 3;
 const bgHeight = bg.clientHeight;
+const roadWidth = road.clientWidth;
 
 let isStop = false;
 
@@ -24,22 +27,33 @@ const carInfo = {
     isAnimatedLeft: false,
     isAnimatedRight: false,
 };
+const coinInfo = {
+    currentX: coin.offsetLeft,
+    currentY: coin.offsetTop,
+    width: coin.width,
+    height: coin.height,
+    stopId: null,
+    hasPosX: false,
+};
 
-function moveBg(elementInfo) {
-    return () => {
-        let y = elementInfo.currentY + speed;
-        elementInfo.currentY = y;
-        elementInfo.el.style.top = y + "px";
-        if (y > bgHeight) {
-            elementInfo.currentY = -elementInfo.el.clientHeight;
-        }
-
-        if (!isStop) {
-            elementInfo.stopId = requestAnimationFrame(moveBg(elementInfo));
-        } else {
-            cancelAnimationFrame(elementInfo.stopId);
-        }
+treesListEl.forEach((element) => {
+    const tree = {
+        el: element,
+        width: element.clientWidth,
+        height: element.clientHeight,
+        currentX: element.offsetLeft,
+        currentY: element.offsetTop,
+        stopId: null,
     };
+
+    treesList.push(tree);
+});
+
+function startGame() {
+    treesList.forEach((tree) => {
+        requestAnimationFrame(moveBg(tree));
+    });
+    requestAnimationFrame(moveCoin);
 }
 
 function stopGame() {
@@ -58,7 +72,56 @@ function stopGame() {
         treesList.forEach((tree) => {
             requestAnimationFrame(moveBg(tree));
         });
+        console.log(coinInfo.stopId);
+        cancelAnimationFrame(coinInfo.stopId);
+
+        cancelAnimationFrame(carInfo.stopIdUp);
+        carInfo.isAnimatedUp = false;
+        cancelAnimationFrame(carInfo.stopIdDown);
+        carInfo.isAnimatedDown = false;
+        cancelAnimationFrame(carInfo.stopIdLeft);
+        carInfo.isAnimatedLeft = false;
+        cancelAnimationFrame(carInfo.stopIdRight);
+        carInfo.isAnimatedRight = false;
     }
+}
+
+function moveBg(elementInfo) {
+    return () => {
+        let y = elementInfo.currentY + speed;
+        elementInfo.currentY = y;
+        elementInfo.el.style.top = y + "px";
+        if (y > bgHeight) {
+            elementInfo.currentY = -elementInfo.el.clientHeight;
+        }
+
+        if (!isStop) {
+            elementInfo.stopId = requestAnimationFrame(moveBg(elementInfo));
+        } else {
+            cancelAnimationFrame(elementInfo.stopId);
+        }
+    };
+}
+
+function moveCoin() {
+    const y = coinInfo.currentY + speed;
+    let x = 0;
+
+    if (!coinInfo.hasPosX) {
+        x = Math.floor(Math.random() * (roadWidth - coinInfo.width));
+        coinInfo.hasPosX = true;
+        coin.style.left = x + "px";
+        coinInfo.currentX = x;
+    }
+
+    coinInfo.currentY = y;
+    coin.style.top = y + "px";
+
+    if (coinInfo.currentY > bgHeight) {
+        coinInfo.currentY = -coinInfo.height - 100;
+        coinInfo.hasPosX = false;
+    }
+    coinInfo.stopId = requestAnimationFrame(moveCoin);
 }
 
 function moveToTop() {
@@ -87,23 +150,6 @@ function moveToRight() {
 }
 
 startBtn.addEventListener("click", stopGame);
-
-treesListEl.forEach((element) => {
-    const tree = {
-        el: element,
-        width: element.clientWidth,
-        height: element.clientHeight,
-        currentX: element.offsetLeft,
-        currentY: element.offsetTop,
-        stopId: null,
-    };
-
-    treesList.push(tree);
-});
-
-treesList.forEach((tree) => {
-    requestAnimationFrame(moveBg(tree));
-});
 
 window.addEventListener("keydown", (evt) => {
     const code = evt.code;
@@ -159,11 +205,4 @@ window.addEventListener("keyup", (evt) => {
     }
 });
 
-// ArrowUp
-// KeyW
-// ArrowLeft
-// KeyA
-// ArrowRight
-// KeyD
-// ArrowDown
-// KeyS
+startGame();
