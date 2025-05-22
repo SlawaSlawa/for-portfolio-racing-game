@@ -8,6 +8,9 @@ const coin = document.querySelector(".coin");
 const danger = document.querySelector(".danger");
 const road = document.querySelector(".road");
 const score = document.querySelector(".score");
+const result = document.querySelector(".result");
+const resultScore = document.querySelector(".result__score");
+const restartBtn = document.querySelector(".restart-btn");
 
 const treesList = [];
 const speed = 3;
@@ -137,9 +140,16 @@ function moveDanger() {
             dangerInfo.currentY = -dangerInfo.height - 400;
             dangerInfo.hasPosX = false;
         }
+
+        if (hasCollision(dangerInfo)) {
+            stopGame();
+            renderResult();
+        }
+
         dangerInfo.stopId = requestAnimationFrame(moveDanger);
     }
 }
+
 function moveCoin() {
     if (!isStop) {
         const y = coinInfo.currentY + speed;
@@ -229,12 +239,21 @@ function hasCollision(elementInfo) {
     return true;
 }
 
+function renderResult() {
+    result.classList.add("result--active");
+    resultScore.textContent = scoreCounter;
+}
+
 startBtn.addEventListener("click", () => {
     if (!isStop) {
         stopGame();
     } else {
         startGame();
     }
+});
+
+restartBtn.addEventListener("click", () => {
+    location.reload();
 });
 
 window.addEventListener("keydown", (evt) => {
