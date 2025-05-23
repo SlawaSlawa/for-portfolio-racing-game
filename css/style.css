@@ -26,27 +26,36 @@ body {
 }
 
 .tree-1 {
-    top: -69px;
+    top: 1vh;
     left: -125px;
 }
 .tree-2 {
-    top: 160px;
+    top: 30vh;
     left: -220px;
 }
 .tree-3 {
-    top: 400px;
+    top: 65vh;
     left: -225px;
 }
 .tree-4 {
-    top: -70px;
+    top: 2vh;
     left: calc(400px + 10px);
 }
 .tree-5 {
-    top: 210px;
+    top: 33vh;
     left: calc(400px + 20px);
 }
 .tree-6 {
-    top: 400px;
+    top: 60vh;
+    left: calc(400px + 10px);
+}
+
+.tree-7 {
+    top: -26vh;
+    left: -220px;
+}
+.tree-8 {
+    top: -26vh;
     left: calc(400px + 10px);
 }
 
