@@ -20,7 +20,7 @@ const newRecordText = document.querySelector(
 const oldRecord = document.querySelector(".old-record__num");
 
 const treesList = [];
-const speed = 3;
+let speed = 3;
 const step = 5;
 const bgHeight = bg.clientHeight;
 const roadWidth = road.clientWidth;
@@ -185,6 +185,7 @@ function moveCoin() {
             coinInfo.isCollision = true;
             score.textContent = scoreCounter;
             coin.style.display = "none";
+            if (scoreCounter % 2 === 0) speed++;
         }
 
         if (!hasCollision(coinInfo)) coinInfo.isCollision = false;

@@ -59,6 +59,7 @@ body {
 .car {
     position: absolute;
     width: 80px;
+    height: 142px;
     left: calc(50% - 40px);
     top: 450px;
     z-index: 30;
