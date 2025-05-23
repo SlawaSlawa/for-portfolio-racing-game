@@ -47,6 +47,9 @@
                     <img src="images/car.png" alt="Car" class="car" />
                 </div>
                 <div class="score">0</div>
+                <div class="old-record">
+                    Рекорд: <span class="old-record__num">0</span>
+                </div>
                 <button class="start-btn">
                     <svg
                         class="start-btn__icon start-btn__icon--active"
@@ -79,6 +82,14 @@
                     <h2 class="result__title">Игра окончена!</h2>
                     <p class="result__text">
                         Ваш результат: <span class="result__score">100</span>
+                    </p>
+                    <p class="result__text">
+                        Рекорд
+                        <span class="result__score" id="record">100</span>
+                    </p>
+                    <p class="result__text result__text--record">
+                        Вы поставили новый рекорд!!!
+                        <span class="result__score">100</span>
                     </p>
                     <button class="restart-btn">Начать занаво</button>
                 </div>

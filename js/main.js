@@ -11,6 +11,13 @@ const score = document.querySelector(".score");
 const result = document.querySelector(".result");
 const resultScore = document.querySelector(".result__score");
 const restartBtn = document.querySelector(".restart-btn");
+const recordEl = document.querySelector("#record");
+const resultText = document.querySelectorAll(".result__text");
+const newRecordTextWrapper = document.querySelector(".result__text--record");
+const newRecordText = document.querySelector(
+    ".result__text--record .result__score"
+);
+const oldRecord = document.querySelector(".old-record__num");
 
 const treesList = [];
 const speed = 3;
@@ -18,8 +25,11 @@ const step = 5;
 const bgHeight = bg.clientHeight;
 const roadWidth = road.clientWidth;
 
+const record = localStorage.getItem("racing-game-record") || 0;
 let scoreCounter = 0;
 let isStop = false;
+
+oldRecord.textContent = record;
 
 const carInfo = {
     currentX: car.offsetLeft,
@@ -240,8 +250,19 @@ function hasCollision(elementInfo) {
 }
 
 function renderResult() {
+    const currentScore = scoreCounter;
+
     result.classList.add("result--active");
     resultScore.textContent = scoreCounter;
+    recordEl.textContent = record;
+    startBtn.style.display = "none";
+
+    if (record < currentScore) {
+        localStorage.setItem("racing-game-record", currentScore);
+        newRecordText.textContent = currentScore;
+        resultText.forEach((item) => (item.style.display = "none"));
+        newRecordTextWrapper.style.display = "block";
+    }
 }
 
 startBtn.addEventListener("click", () => {

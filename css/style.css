@@ -112,6 +112,15 @@ body {
     z-index: 50;
 }
 
+.old-record {
+    position: absolute;
+    top: 90px;
+    left: 20px;
+    font-size: 26px;
+    color: rgb(57, 66, 59);
+    z-index: 50;
+}
+
 .danger {
     position: absolute;
     top: -480px;
@@ -161,9 +170,14 @@ body {
 .result__text {
     margin-bottom: 20px;
 }
+.result__text--record {
+    display: none;
+    color: rgb(33, 133, 46);
+}
 .result__score {
     font-size: 20px;
     font-weight: bold;
+    color: rgb(33, 133, 46);
 }
 .restart-btn {
     padding: 10px 20px;
